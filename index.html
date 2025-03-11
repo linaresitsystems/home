@@ -95,19 +95,20 @@
     <section id="contacto" class="bg-light py-5">
         <div class="container">
             <h2 class="text-center">Contáctanos</h2>
-            <form id="contactForm" class="mt-4"> <!-- Añadido el id="contactForm" -->
+            <form id="contactForm" action="https://formspree.io/f/mwplknyn" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
-                    <input type="text" name="nombre" class="form-control" required> <!-- Añadido name="nombre" -->
+                    <input type="text" name="nombre" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" required> <!-- Añadido name="email" -->
+                    <input type="email" name="email" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Mensaje</label>
-                    <textarea class="form-control" name="mensaje" rows="4" required></textarea> <!-- Añadido name="mensaje" -->
+                    <textarea class="form-control" name="mensaje" rows="4" required></textarea>
                 </div>
+                <!-- Botón de envío -->
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
         </div>
@@ -125,20 +126,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
         (function() {
-        emailjs.init({
-            publicKey: "6on2m93eZJdXxf7C3", // Reemplaza con tu Public Key (User ID)
-        });
+            emailjs.init({
+                publicKey: "6on2m93eZJdXxf7C3", // Reemplaza con tu Public Key (User ID)
+            });
         })();
 
         function enviarCorreo(event) {
-            event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+            event.preventDefault();
 
             // Obtén los datos del formulario
             const nombre = document.querySelector('input[name="nombre"]').value;
             const email = document.querySelector('input[name="email"]').value;
             const mensaje = document.querySelector('textarea[name="mensaje"]').value;
-
-            console.log("Datos del formulario:", { nombre, email, mensaje }); // Verifica los datos
 
             // Envía el correo usando EmailJS
             emailjs.send("service_07ynfc8", "template_gi02bw5", {
@@ -148,6 +147,8 @@
             })
             .then(() => {
                 alert("Mensaje enviado correctamente.");
+                // Envía el formulario a Formspree
+                document.getElementById("contactForm").submit();
             }, (error) => {
                 alert("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
                 console.error("Error:", error);
