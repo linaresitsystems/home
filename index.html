@@ -136,6 +136,8 @@
             const email = document.querySelector('input[name="email"]').value;
             const mensaje = document.querySelector('textarea[name="mensaje"]').value;
 
+            console.log("Datos del formulario:", { nombre, email, mensaje }); // Verifica los datos
+
             // Envía el correo usando EmailJS
             emailjs.send("service_07ynfc8", "template_gi02bw5", {
                 from_name: nombre,
