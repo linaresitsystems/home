@@ -10,15 +10,36 @@
             background-color: #f8f9fa;
         }
         .hero {
-            background: url('https://source.unsplash.com/1600x600/?technology') no-repeat center center;
+            background: url('assets/images/Office_Web.png') no-repeat center center;
             background-size: cover;
             color: white;
             text-align: center;
             padding: 100px 0;
+            position: relative;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Oscurece la imagen de fondo para mejorar la legibilidad del texto */
+            z-index: 1;
+        }
+        .hero h1, .hero p, .hero a {
+            position: relative;
+            z-index: 2;
         }
         .navbar-brand img {
-            height: 80px; /* Ajusta la altura de la imagen según sea necesario */
+            height: 40px; /* Ajusta la altura de la imagen según sea necesario */
             margin-right: 10px; /* Espacio entre la imagen y el texto */
+        }
+        .eslogan {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -27,7 +48,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="assets/images/Logo.png" alt="Logo Linares IT Systems"> Linares IT Systems
+                <img src="assets/images/logo.png" alt="Logo Linares IT Systems"> Linares IT Systems
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -46,6 +67,7 @@
         <div class="container">
             <h1>Soluciones IT para tu negocio</h1>
             <p>Soporte, mantenimiento y consultoría en informática</p>
+            <p class="eslogan">IT que conecta tu futuro</p>
             <a href="#contacto" class="btn btn-light btn-lg">Contáctanos</a>
         </div>
     </header>
