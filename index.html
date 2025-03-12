@@ -38,20 +38,12 @@
             event.preventDefault();
 
             const form = event.target;
-            const formData = {
-                nombre: form.nombre.value,
-                email: form.email.value,
-                mensaje: form.mensaje.value
-            };
+            const formData = new FormData(form);
 
             try {
                 let response = await fetch("https://formspree.io/f/mwplknyn", {
                     method: "POST",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify(formData)
+                    body: formData
                 });
                 
                 if (!response.ok) throw new Error("Error en Formspree");
@@ -66,9 +58,9 @@
             
             try {
                 await emailjs.send("service_07ynfc8", "template_gi02bw5", {
-                    from_name: formData.nombre,
-                    from_email: formData.email,
-                    message: formData.mensaje
+                    from_name: formData.get("nombre"),
+                    from_email: formData.get("email"),
+                    message: formData.get("mensaje")
                 });
                 alert("Mensaje enviado correctamente a través de EmailJS.");
             } catch (emailError) {
