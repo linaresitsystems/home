@@ -43,12 +43,20 @@
             try {
                 let response = await fetch("https://formspree.io/f/mwplknyn", {
                     method: "POST",
+                    headers: { "Accept": "application/json" },
                     body: formData
                 });
                 
+                let contentType = response.headers.get("content-type");
                 if (!response.ok) throw new Error("Error en Formspree");
-                let result = await response.json();
-                if (result.ok) {
+                
+                if (contentType && contentType.includes("application/json")) {
+                    let result = await response.json();
+                    if (result.ok) {
+                        alert("Mensaje enviado correctamente a través de Formspree.");
+                        return;
+                    }
+                } else {
                     alert("Mensaje enviado correctamente a través de Formspree.");
                     return;
                 }
