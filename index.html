@@ -41,6 +41,10 @@
             margin-top: 10px;
             color: #ffffff;
         }
+        .alert-success {
+            display: none; /* Oculta el mensaje de éxito por defecto */
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +115,11 @@
                 <!-- Widget de reCAPTCHA con tu clave pública -->
                 <div class="g-recaptcha" data-sitekey="6LfTbvIqAAAAALyCiHOlhVl5hZ9j9N4DbIJmhp0x"></div>
                 <br>
+                <!-- Mensaje de éxito -->
+                <div id="mensajeExito" class="alert alert-success" role="alert">
+                    ¡Mensaje enviado correctamente!
+                </div>
+                <!-- Botón de envío -->
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
         </div>
@@ -173,8 +182,12 @@
                 if (!response.ok) {
                     throw new Error("Error en Formspree");
                 }
-                alert("Mensaje enviado correctamente a través de Formspree.");
-                grecaptcha.reset(); // Resetea el reCAPTCHA
+                // Limpia los campos del formulario
+                document.getElementById("contactForm").reset();
+                // Muestra el mensaje de éxito
+                document.getElementById("mensajeExito").style.display = "block";
+                // Resetea el reCAPTCHA
+                grecaptcha.reset();
             })
             .catch(error => {
                 console.error("Error con Formspree:", error);
@@ -185,7 +198,10 @@
                     message: mensaje,
                 })
                 .then(() => {
-                    alert("Mensaje enviado correctamente a través de EmailJS.");
+                    // Limpia los campos del formulario
+                    document.getElementById("contactForm").reset();
+                    // Muestra el mensaje de éxito
+                    document.getElementById("mensajeExito").style.display = "block";
                 }, (error) => {
                     alert("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
                     console.error("Error con EmailJS:", error);
