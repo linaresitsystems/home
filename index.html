@@ -95,7 +95,7 @@
     <section id="contacto" class="bg-light py-5">
         <div class="container">
             <h2 class="text-center">Contáctanos</h2>
-            <form id="contactForm" action="https://formspree.io/f/mwplknyn" method="POST">
+            <form id="contactForm" class="mt-4">
                 <div class="mb-3">
                     <label class="form-label">Nombre</label>
                     <input type="text" name="nombre" class="form-control" required>
@@ -139,19 +139,38 @@
             const email = document.querySelector('input[name="email"]').value;
             const mensaje = document.querySelector('textarea[name="mensaje"]').value;
 
-            // Envía el correo usando EmailJS
-            emailjs.send("service_07ynfc8", "template_gi02bw5", {
-                from_name: nombre,
-                from_email: email,
-                message: mensaje,
+            // Primero intenta enviar con Formspree
+            fetch("https://formspree.io/f/mwplknyn", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nombre: nombre,
+                    email: email,
+                    mensaje: mensaje,
+                }),
             })
-            .then(() => {
-                alert("Mensaje enviado correctamente.");
-                // Envía el formulario a Formspree
-                document.getElementById("contactForm").submit();
-            }, (error) => {
-                alert("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
-                console.error("Error:", error);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error en Formspree");
+                }
+                alert("Mensaje enviado correctamente a través de Formspree.");
+            })
+            .catch(error => {
+                console.error("Error con Formspree:", error);
+                // Si Formspree falla, intenta con EmailJS
+                emailjs.send("service_07ynfc8", "template_gi02bw5", {
+                    from_name: nombre,
+                    from_email: email,
+                    message: mensaje,
+                })
+                .then(() => {
+                    alert("Mensaje enviado correctamente a través de EmailJS.");
+                }, (error) => {
+                    alert("Error al enviar el mensaje. Por favor, inténtalo de nuevo.");
+                    console.error("Error con EmailJS:", error);
+                });
             });
         }
 
