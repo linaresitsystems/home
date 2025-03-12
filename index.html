@@ -39,27 +39,25 @@
 
             const form = event.target;
             const formData = new FormData(form);
-            const encodedData = new URLSearchParams(formData).toString();
+            const object = {};
+            formData.forEach((value, key) => { object[key] = value; });
+            const jsonData = JSON.stringify(object);
 
             try {
                 let response = await fetch("https://formspree.io/f/mwplknyn", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: encodedData,
-                    mode: "cors"
+                    headers: { "Content-Type": "application/json" },
+                    body: jsonData
                 });
                 
-                let contentType = response.headers.get("content-type");
-                if (!response.ok) throw new Error("Error en Formspree: " + response.status);
+                if (!response.ok) throw new Error(`Error en Formspree: ${response.status}`);
                 
-                if (contentType && contentType.includes("application/json")) {
-                    let result = await response.json();
-                    if (result.ok) {
-                        alert("Mensaje enviado correctamente a través de Formspree.");
-                        return;
-                    }
+                let result = await response.json();
+                if (result.next) {
+                    window.location.href = result.next;
                 } else {
                     alert("Mensaje enviado correctamente a través de Formspree.");
+                    form.reset();
                     return;
                 }
             } catch (error) {
@@ -73,6 +71,7 @@
                     message: formData.get("mensaje")
                 });
                 alert("Mensaje enviado correctamente a través de EmailJS.");
+                form.reset();
             } catch (emailError) {
                 alert("Error al enviar el mensaje. Inténtalo de nuevo más tarde.");
                 console.error("Error con EmailJS:", emailError);
