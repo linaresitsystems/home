@@ -47,25 +47,33 @@
             try {
                 let response = await fetch("https://formspree.io/f/mwplknyn", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
                     body: JSON.stringify(formData)
                 });
                 
                 if (!response.ok) throw new Error("Error en Formspree");
-                alert("Mensaje enviado correctamente a través de Formspree.");
+                let result = await response.json();
+                if (result.ok) {
+                    alert("Mensaje enviado correctamente a través de Formspree.");
+                    return;
+                }
             } catch (error) {
                 console.warn("Formspree falló, intentando EmailJS", error);
-                try {
-                    await emailjs.send("service_07ynfc8", "template_gi02bw5", {
-                        from_name: formData.nombre,
-                        from_email: formData.email,
-                        message: formData.mensaje
-                    });
-                    alert("Mensaje enviado correctamente a través de EmailJS.");
-                } catch (emailError) {
-                    alert("Error al enviar el mensaje. Inténtalo de nuevo más tarde.");
-                    console.error("Error con EmailJS:", emailError);
-                }
+            }
+            
+            try {
+                await emailjs.send("service_07ynfc8", "template_gi02bw5", {
+                    from_name: formData.nombre,
+                    from_email: formData.email,
+                    message: formData.mensaje
+                });
+                alert("Mensaje enviado correctamente a través de EmailJS.");
+            } catch (emailError) {
+                alert("Error al enviar el mensaje. Inténtalo de nuevo más tarde.");
+                console.error("Error con EmailJS:", emailError);
             }
         }
         document.getElementById("contactForm").addEventListener("submit", enviarCorreo);
